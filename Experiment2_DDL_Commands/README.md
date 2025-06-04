@@ -109,7 +109,7 @@ Write a SQL query to modify the Student_details table by adding a new column Ema
 
 ALTER TABLE Student_details ADD COLUMN Email VARCHAR(50); ALTER TABLE Student_details ADD COLUMN MARKS DEFAULT '0';
 
-Output:
+## Output:
 ![image](https://github.com/user-attachments/assets/eccda2cc-71ec-4a1d-936c-5f0c60a7a733)
 
 
@@ -119,7 +119,7 @@ Create a new table named contacts with the following specifications: contact_id 
 
 CREATE TABLE contacts ( contact_id INT PRIMARY KEY, first_name TEXT NOT NULL, last_name TEXT NOT NULL, email TEXT, phone TEXT NOT NULL, CHECK (LENGTH(phone)>=10) );
 
-Output:
+## Output:
 ![image](https://github.com/user-attachments/assets/f28966ff-bae6-4687-a445-d00c60675e88)
 
 
@@ -131,7 +131,7 @@ Table attributes are ISBN, Title, Author, Publisher, YearPublished
 
 INSERT INTO Books(ISBN, Title, Author, Publisher, YearPublished) SELECT ISBN, Title, Author, Publisher, YearPublished FROM Out_of_print_books;
 
-Output:
+## Output:
 ![image](https://github.com/user-attachments/assets/c04509c8-39c6-4a68-927f-9509effc72d0)
 
 
@@ -142,7 +142,7 @@ DepartmentID as INTEGER DepartmentName as TEXT
 
 CREATE TABLE Departments( DepartmentID INTEGER, DepartmentName TEXT);
 
-Output:
+## Output:
 ![image](https://github.com/user-attachments/assets/99f55c04-d8f3-49a8-ab0c-29d3900191b9)
 
 
@@ -152,7 +152,7 @@ Write an SQL query to add two new columns, department_id and manager_id, to the 
 
 ALTER TABLE employee ADD COLUMN department_id INTEGER; ALTER TABLE employee ADD COLUMN manager_id INTEGER DEFAULT NULL;
 
-Output:
+## Output:
 ![image](https://github.com/user-attachments/assets/76979743-2bd7-4360-a2b9-6dc2f3abfe54)
 
 
@@ -163,7 +163,7 @@ Table attributes are CustomerID, Name, Address, Email
 
 INSERT INTO Customers(CustomerID, Name, Address, Email) SELECT CustomerID, Name, Address, Email FROM Old_customers;6
 
-Output:
+## Output:
 ![image](https://github.com/user-attachments/assets/9cf20062-df49-42c7-b0fe-b411cfdfb05e)
 
 
@@ -176,7 +176,7 @@ customer_id | cust_name | city | grade | salesman_id -------------+-------------
 
 ALTER TABLE customer ADD COLUMN discount DECIMAL(5,2);
 
-Output:
+## Output:
 ![image](https://github.com/user-attachments/assets/0d1222d4-3e7f-4f4d-b71f-f57b3e78f03f)
 
 
@@ -187,7 +187,7 @@ MemberID as INTEGER MemberName as TEXT JoinDate as DATE
 
 create table Members( MemberID INTEGER, MemberName TEXT, JoinDate DATE );
 
-Output:
+## Output:
 ![image](https://github.com/user-attachments/assets/06250af9-46a4-437f-acfb-618055ac8a65)
 
 
@@ -200,7 +200,7 @@ customer_id | cust_name | city | grade | salesman_id -------------+-------------
 
 alter table customer add column birth_date timestamp;
 
-Output:
+## Output:
 ![image](https://github.com/user-attachments/assets/5b83ac6e-6eef-42b8-b285-af87ff211d38)
 
 
@@ -215,7 +215,7 @@ Note: The Subject and MARKS columns will use their default values.
 
 insert into Student_details(RollNo,Name,Gender) values(204,"Samuel Black","M");
 
-Output:
+## Output:
 ![image](https://github.com/user-attachments/assets/795d1abe-e335-464a-b7e8-e3d002e20c43)
 
 
