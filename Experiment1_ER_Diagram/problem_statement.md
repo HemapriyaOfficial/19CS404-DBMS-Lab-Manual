@@ -53,218 +53,220 @@ University / Hospital (choose one)
 ## ER Diagram:
 ![image](https://github.com/user-attachments/assets/ca2ed45a-2975-454a-91de-902f1dac1a25)
 
+## Entities and Attributes:
+## Patient
+- PatientID (PK)
 
-Patient
-PatientID (PK)
+- FullName
 
-FullName
+- DOB
 
-DOB
+- Gender
 
-Gender
+- Address
 
-Address
+- Phone
 
-Phone
+- Email
 
-Email
+- InsuranceDetails
 
-InsuranceDetails
+## Doctor
+- DoctorID (PK)
 
-Doctor
-DoctorID (PK)
+- FullName
 
-FullName
+- Specialization
 
-Specialization
+- Phone
 
-Phone
+- Email
 
-Email
+- ScheduleDetails
 
-ScheduleDetails
+## Department
+- DepartmentID (PK)
 
-Department
-DepartmentID (PK)
+- DepartmentName
 
-DepartmentName
+- DepartmentHead
 
-DepartmentHead
+## Appointment
+- AppointmentID (PK)
 
-Appointment
-AppointmentID (PK)
+- AppointmentDateTime
 
-AppointmentDateTime
+- Reason
 
-Reason
+- Notes
 
-Notes
+- FK: PatientID
 
-FK: PatientID
+- FK: DoctorID
 
-FK: DoctorID
+## MedicalRecord
+- MedicalRecordID (PK)
 
-MedicalRecord
-MedicalRecordID (PK)
+- Diagnosis
 
-Diagnosis
+- Medications
 
-Medications
+- Treatments
 
-Treatments
+- TestResults
 
-TestResults
+- VisitDate
 
-VisitDate
+- FK: PatientID
 
-FK: PatientID
+- FK: DoctorID
 
-FK: DoctorID
+## Billing
+- BillingID (PK)
 
-Billing
-BillingID (PK)
+- AppointmentID (FK)
 
-AppointmentID (FK)
+- TotalAmount
 
-TotalAmount
+- Status (Paid/Unpaid)
 
-Status (Paid/Unpaid)
+- BillingDate
 
-BillingDate
+## Payment
+- PaymentID (PK)
 
-Payment
-PaymentID (PK)
+- BillingID (FK)
 
-BillingID (FK)
+- PaymentMode (Cash/Card/Online)
 
-PaymentMode (Cash/Card/Online)
+- PaymentDate
 
-PaymentDate
+- AmountPaid
 
-AmountPaid
+## Relationships and Constraints:
+### Relationships
+- Department — Doctor: 1 to Many
 
-Relationships and Constraints:
-Relationships
-Department — Doctor: 1 to Many
+- Doctor — Appointment — Patient: Many to Many (via Appointment)
 
-Doctor — Appointment — Patient: Many to Many (via Appointment)
+- Patient — MedicalRecord — Doctor: Many to Many
 
-Patient — MedicalRecord — Doctor: Many to Many
+- Appointment — Billing: 1 to 1
 
-Appointment — Billing: 1 to 1
+- Billing — Payment: 1 to Many (Installments possible)
 
-Billing — Payment: 1 to Many (Installments possible)
+### Cardinality & Constraints
+- Every Appointment is between 1 Doctor and 1 Patient.
 
-Cardinality & Constraints
-Every Appointment is between 1 Doctor and 1 Patient.
+- A Billing record is created per appointment.
 
-A Billing record is created per appointment.
+- A Payment may be split into multiple records.
 
-A Payment may be split into multiple records.
+## Extension (Prerequisite / Billing):
+### Extension: Billing and Payment
+### New Entity: Bill
+- Attributes: BillID (PK), DateIssued, TotalAmount, Status (e.g., Paid/Unpaid), PaymentMethod
 
-Extension (Prerequisite / Billing):
-Extension: Billing and Payment
-New Entity: Bill
-Attributes: BillID (PK), DateIssued, TotalAmount, Status (e.g., Paid/Unpaid), PaymentMethod
+- Relationship: Generates between Appointment and Bill
 
-Relationship: Generates between Appointment and Bill
+- One appointment generates one bill, so it’s a 1:1 relationship.
 
-One appointment generates one bill, so it’s a 1:1 relationship.
+### Optional Extension:
+- Add a Payment entity if tracking partial payments or transactions is needed.
 
-Optional Extension:
-Add a Payment entity if tracking partial payments or transactions is needed.
+- Attributes: PaymentID, AmountPaid, DatePaid, PaymentMethod
 
-Attributes: PaymentID, AmountPaid, DatePaid, PaymentMethod
+- Relationship: One Bill → Many Payments (1:N)
 
-Relationship: One Bill → Many Payments (1:N)
+### Design Justification:
+- Keeping Bill as a separate entity allows tracking financial data without overloading the Appointment entity.
 
-Design Justification:
-Keeping Bill as a separate entity allows tracking financial data without overloading the Appointment entity.
+- Makes it flexible to manage payments, receipts, and outstanding dues.
+## Design Choices:
+### Entity Choices and Justifications
+### Patient
+- Chosen to represent individuals receiving care.
 
-Makes it flexible to manage payments, receipts, and outstanding dues.
+- Attributes like PatientID, Name, DOB, and InsuranceDetails are critical for identity, communication, and billing.
 
-Design Choices:
-Entity Choices and Justifications
-Patient
-Chosen to represent individuals receiving care.
+### Doctor
+- Represents healthcare providers.
 
-Attributes like PatientID, Name, DOB, and InsuranceDetails are critical for identity, communication, and billing.
+- DoctorID, Specialization, and WorkSchedule support patient assignment, filtering, and appointments.
 
-Doctor
-Represents healthcare providers.
+### Department
+- Provides organizational structure (e.g., Cardiology).
 
-DoctorID, Specialization, and WorkSchedule support patient assignment, filtering, and appointments.
+- Allows grouping doctors under departments and supports departmental management.
 
-Department
-Provides organizational structure (e.g., Cardiology).
+### Appointment
+- Captures interaction between a patient and doctor.
 
-Allows grouping doctors under departments and supports departmental management.
+- It’s a many-to-many relationship (a patient may meet many doctors, and doctors consult many patients), resolved as an entity with AppointmentID, DateTime, etc.
 
-Appointment
-Captures interaction between a patient and doctor.
+### MedicalRecord
+- Tracks clinical data (diagnosis, medications, test results).
 
-It’s a many-to-many relationship (a patient may meet many doctors, and doctors consult many patients), resolved as an entity with AppointmentID, DateTime, etc.
+- Linked to both Patient and Doctor to preserve accountability and medical history.
 
-MedicalRecord
-Tracks clinical data (diagnosis, medications, test results).
+### Bill
+- Introduced to track financial transactions.
 
-Linked to both Patient and Doctor to preserve accountability and medical history.
+- Associated with Appointment since billing is usually appointment-based.
 
-Bill
-Introduced to track financial transactions.
+- Supports attributes such as TotalAmount, PaymentMethod, and Status.
 
-Associated with Appointment since billing is usually appointment-based.
+### Payment
+- Represents actual financial transaction(s) against a bill.
 
-Supports attributes such as TotalAmount, PaymentMethod, and Status.
+- Allows multiple payments per bill (e.g., installments, partial payments).
 
-Payment
-Represents actual financial transaction(s) against a bill.
+- Attributes: PaymentID, BillID, PaymentDate, AmountPaid, PaymentMethod.
 
-Allows multiple payments per bill (e.g., installments, partial payments).
+## Relationship Choices and Assumptions
+### Patient – Appointment – Doctor
+- Modeled via the Appointment entity to capture the many-to-many relationship.
 
-Attributes: PaymentID, BillID, PaymentDate, AmountPaid, PaymentMethod.
+- Includes attributes like ReasonForVisit, Date, and Time.
 
-Relationship Choices and Assumptions
-Patient – Appointment – Doctor
-Modeled via the Appointment entity to capture the many-to-many relationship.
+- A patient can have multiple appointments with different doctors.
 
-Includes attributes like ReasonForVisit, Date, and Time.
+### Doctor – Department
+- A department can have many doctors (1:N).
 
-A patient can have multiple appointments with different doctors.
+- Each doctor is assigned to one department.
 
-Doctor – Department
-A department can have many doctors (1:N).
+### MedicalRecord – Patient & Doctor
+- MedicalRecord is created for each appointment, linking a specific patient and doctor.
 
-Each doctor is assigned to one department.
+- Relationship: N:1 for both patient and doctor sides.
 
-MedicalRecord – Patient & Doctor
-MedicalRecord is created for each appointment, linking a specific patient and doctor.
+- Captures diagnoses, prescriptions, and treatments.
 
-Relationship: N:1 for both patient and doctor sides.
+### Appointment – Bill
+- Every appointment results in exactly one bill (1:1).
 
-Captures diagnoses, prescriptions, and treatments.
+- The Bill entity stores total charges and billing status for the services provided.
 
-Appointment – Bill
-Every appointment results in exactly one bill (1:1).
+### Bill – Payment
+- Each bill can be settled through one or more payments (1:N).
 
-The Bill entity stores total charges and billing status for the services provided.
+- The Payment entity includes attributes like AmountPaid, PaymentDate, and PaymentMethod.
 
-Bill – Payment
-Each bill can be settled through one or more payments (1:N).
+- Supports partial payments, insurance co-pays, or installments.
 
-The Payment entity includes attributes like AmountPaid, PaymentDate, and PaymentMethod.
+## Key Assumptions
+- Every patient visit must have a corresponding appointment.
 
-Supports partial payments, insurance co-pays, or installments.
+- A bill is always generated for an appointment (even if free, for record-keeping).
 
-Key Assumptions
-Every patient visit must have a corresponding appointment.
+- Medical records are visit-based, not cumulative.
 
-A bill is always generated for an appointment (even if free, for record-keeping).
+- Payment tracking (e.g., partial payments, refunds) can be optionally extended by adding a Payment entity.
 
-Medical records are visit-based, not cumulative.
-
-Payment tracking (e.g., partial payments, refunds) can be optionally extended by adding a Payment entity.
 
 
 ## RESULT
 Successfully designed an ER diagram for the Hospital Database with entities, relationships, constraints, and billing-extension using the Payment entity to support real-world healthcare operations.
+
+
